@@ -47,10 +47,31 @@ def new_token():
 
 # FCT : test si il y a un gagnant
 def test_winner():
-    indice_rows, indice_columns = 5, 0
+    indice_rows, indice_columns = 0, 0
+    red_winner, blue_winner = 0, 0
 
-    while 1:
+    # test d'un gagnant sur les lignes
+
+    for i in range(6): # pour chaque lignes
+        for u in range(7):  # pour chaque colonnes
+            if grid[i][u] == 'R':
+                red_winner += 1
+                blue_winner = 0
+            elif grid[i][u] == 'B':
+                red_winner = 0
+                blue_winner += 1
+            else:
+                red_winner = 0
+                blue_winner = 0
+            
+            # return si gaganant trouvé (1 = rouge 2 = bleu)
+            if red_winner == 4:
+                return 1
+            elif blue_winner == 4:
+                return 2
+
         
+    # return 0 si aucun gagant n'est trouvé  
     return 0
 
 
@@ -64,7 +85,6 @@ print("\nIl y a 2 joueur ROUGE et BLEU")
 print("\nROUGE = R\nBLEU = B\nvide =  ")
 
 display_grid()
-print(ord('B'))
 
 # Lancement de la partie
 
@@ -74,6 +94,17 @@ while end_game == 0:
     else:
         count_round += 1
         display_grid()
+    
+    winner = test_winner()
+
+    if winner != 0:
+        match winner :
+            case 1:
+                print("Joueur ROUGE gagne la partie")
+                break
+            case 2 :
+                print("Joueur BLEU gagne la partie")
+                break
     
 
 
