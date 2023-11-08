@@ -18,7 +18,7 @@ def display_grid():
 
 # FCT : ajouter un jeton dans la grille 
 def new_token():
-    indice_row = 5
+    indice_rows = 5
     if (count_round % 2) == 0:  # Si le numéro du round es paire = ROUGE qui joue
         player = 'ROUGE'
     else:                       # Sinon Bleu qui joue
@@ -28,25 +28,29 @@ def new_token():
     input_column = int(input("Entrer la position (ligne) du jeton (0 - 6) : "))
 
     while 1:
-        if grid[indice_row][input_column] == ' ':
+        if grid[indice_rows][input_column] == ' ':
             if player == 'ROUGE':
-                grid[indice_row][input_column] = 'R'
+                grid[indice_rows][input_column] = 'R'
                 #count_round += 1
                 return 0
             elif player == 'BLEU':
-                grid[indice_row][input_column] = 'B'
+                grid[indice_rows][input_column] = 'B'
                 #count_round += 1
                 return 0
-        elif indice_row  == 0: 
+        elif indice_rows  == 0: 
             return 1       
-        elif grid[indice_row][input_column]  != ' ':
-            indice_row -= 1
+        elif grid[indice_rows][input_column]  != ' ':
+            indice_rows -= 1
 
         
 
 
 # FCT : test si il y a un gagnant
 def test_winner():
+    indice_rows, indice_columns = 5, 0
+
+    while 1:
+        
     return 0
 
 
@@ -60,6 +64,7 @@ print("\nIl y a 2 joueur ROUGE et BLEU")
 print("\nROUGE = R\nBLEU = B\nvide =  ")
 
 display_grid()
+print(ord('B'))
 
 # Lancement de la partie
 
