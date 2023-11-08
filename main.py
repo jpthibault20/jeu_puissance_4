@@ -47,9 +47,8 @@ def new_token():
 
 # FCT : test si il y a un gagnant
 def test_winner():
-    red_winner, blue_winner = 0, 0
-
     # test d'un gagnant sur les lignes
+    red_winner, blue_winner = 0, 0
     for i in range(6): # pour chaque lignes
         for u in range(7):  # pour chaque colonnes
             if grid[i][u] == 'R':
@@ -68,8 +67,8 @@ def test_winner():
             elif blue_winner == 4:
                 return 2
             
+    # test d'un gagnant sur les colonnes
     red_winner, blue_winner = 0, 0
-    #test d'un gagnant sur les colonnes
     for u in range(7):
         for i in range(6):
             if grid[i][u] == 'R':
@@ -87,6 +86,24 @@ def test_winner():
                 return 1
             elif blue_winner == 4:
                 return 2
+            
+    # test d'un gagant sue les diagonal descendantes
+    for row in range(len(grid) - 3):
+        for col in range(int(len(grid[0]) - 3)):
+                if grid[row][col] != 0 and grid[row][col] == grid[row + 1][col + 1] == grid[row + 2][col + 2] == grid[row + 3][col + 3]:
+                    if grid[row][col] == 'R':
+                        return 1
+                    elif grid[row][col] == 'B':
+                        return 2
+                    
+    # test d'un gagant sue les diagonal ascendantes
+    for row in range(3, len(grid)):
+        for col in range(int(len(grid[0])) - 3):
+            if grid[row][col] != 0 and grid[row][col] == grid[row - 1][col + 1] == grid[row - 2][col + 2] == grid[row - 3][col + 3]:
+                if grid[row][col] == 'R':
+                    return 1
+                elif grid[row][col] == 'B':
+                    return 2
 
 
         
