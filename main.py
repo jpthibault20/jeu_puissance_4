@@ -25,8 +25,8 @@ def new_token():
     # quelle joueur doit jouer, en fonction du nombre de tour (paire / inpaire)
     if (count_round % 2) == 0:  # Si le numéro du round es paire = ROUGE qui joue
         player = 'ROUGE'
-    else:                       # Sinon Bleu qui joue
-        player = 'BLEU'
+    else:                       # Sinon Jaune qui joue
+        player = 'JAUNE'
     print("\nAjout d'un nouveau jeton pour le joueur", player)
 
 
@@ -43,8 +43,8 @@ def new_token():
                             grid[indice_rows][column_input] = 'R'
                             count_round += 1
                             return 0
-                        elif player == 'BLEU':
-                            grid[indice_rows][column_input] = 'B'
+                        elif player == 'JAUNE':
+                            grid[indice_rows][column_input] = 'J'
                             count_round += 1
                             return 0
                     else:
@@ -70,7 +70,7 @@ def test_winner():
                     if grid[row][col] == 'R':
                         red_win = 1
                         blue_win = 0
-                    elif grid[row][col] == 'B':
+                    elif grid[row][col] == 'J':
                         red_win = 0
                         blue_win = 1
             
@@ -81,7 +81,7 @@ def test_winner():
                     if grid[row][col] == 'R':
                         red_win = 1
                         blue_win = 0
-                    elif grid[row][col] == 'B':
+                    elif grid[row][col] == 'J':
                         red_win = 0
                         blue_win = 1
             
@@ -92,7 +92,7 @@ def test_winner():
                     if grid[row][col] == 'R':
                         red_win = 1
                         blue_win = 0
-                    elif grid[row][col] == 'B':
+                    elif grid[row][col] == 'J':
                         red_win = 0
                         blue_win = 1
                     
@@ -103,7 +103,7 @@ def test_winner():
                 if grid[row][col] == 'R':
                     red_win = 1
                     blue_win = 0
-                elif grid[row][col] == 'B':
+                elif grid[row][col] == 'J':
                     red_win = 0
                     blue_win = 1
 
@@ -126,7 +126,7 @@ def test_winner():
 
 # Explication début de partie
 print("\n---    DEBUT DE LA PARTIE   ---")
-print("\nIl y a 2 joueur ROUGE et BLEU")
+print("\nIl y a 2 joueur ROUGE et JAUNE")
 print("\nROUGE = R\nBLEU = B\nvide =  ")
 display_grid()
 
