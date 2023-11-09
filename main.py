@@ -16,153 +16,122 @@ def display_grid():
     print("---------------------")
     print(grid_index)
 
+
 # FCT : ajouter un jeton dans la grille 
 def new_token():
+    global count_round
     indice_rows = 5
+
+    # quelle joueur doit jouer, en fonction du nombre de tour (paire / inpaire)
     if (count_round % 2) == 0:  # Si le numéro du round es paire = ROUGE qui joue
         player = 'ROUGE'
     else:                       # Sinon Bleu qui joue
         player = 'BLEU'
-
     print("\nAjout d'un nouveau jeton pour le joueur", player)
-    input_column = int(input("Entrer la position (ligne) du jeton (0 - 6) : "))
 
-    while 1:
-        if grid[indice_rows][input_column] == ' ':
-            if player == 'ROUGE':
-                grid[indice_rows][input_column] = 'R'
-                #count_round += 1
-                return 0
-            elif player == 'BLEU':
-                grid[indice_rows][input_column] = 'B'
-                #count_round += 1
-                return 0
-        elif indice_rows  == 0: 
-            return 1       
-        elif grid[indice_rows][input_column]  != ' ':
-            indice_rows -= 1
 
-        
+    # demande puis ajout du je ton dans la grille de jeu
+    while True:
+        user_input = input("Entrer la position (ligne) du jeton (0 -> 6) : ")
+
+        if '0' <= user_input <= '6':
+            column_input = int(user_input)
+            if 0 <= column_input <= 6:
+                while True:
+                    if grid[indice_rows][column_input] == ' ':
+                        if player == 'ROUGE':
+                            grid[indice_rows][column_input] = 'R'
+                            count_round += 1
+                            return 0
+                        elif player == 'BLEU':
+                            grid[indice_rows][column_input] = 'B'
+                            count_round += 1
+                            return 0
+                    else:
+                        if indice_rows == 0:
+                            print("colonnes remplie, choisir une autre")
+                            indice_rows = 5
+                            break
+                        else:
+                            indice_rows -= 1
+
+        print("Erreure Saisie, valeure accépcté : nombre (0 1 2 3 4 5 6)")
 
 
 # FCT : test si il y a un gagnant
 def test_winner():
+    red_win = 0
+    blue_win = 0
+
     # test d'un gagnant sur les lignes
-    red_winner, blue_winner = 0, 0
-    for i in range(6): # pour chaque lignes
-        for u in range(7):  # pour chaque colonnes
-            if grid[i][u] == 'R':
-                red_winner += 1
-                blue_winner = 0
-            elif grid[i][u] == 'B':
-                red_winner = 0
-                blue_winner += 1
-            else:
-                red_winner = 0
-                blue_winner = 0
-            
-            # return si gaganant trouvé (1 = rouge 2 = bleu)
-            if red_winner == 4:
-                return 1
-            elif blue_winner == 4:
-                return 2
+    for row in range(len(grid) - 3):
+        for col in range(int(len(grid[0]))):
+            if grid[row][col] != 0 and grid[row][col] == grid[row + 1][col] == grid[row + 2][col] == grid[row + 3][col]:
+                    if grid[row][col] == 'R':
+                        red_win = 1
+                        blue_win = 0
+                    elif grid[row][col] == 'B':
+                        red_win = 0
+                        blue_win = 1
             
     # test d'un gagnant sur les colonnes
-    red_winner, blue_winner = 0, 0
-    for u in range(7):
-        for i in range(6):
-            if grid[i][u] == 'R':
-                red_winner += 1
-                blue_winner = 0
-            elif grid[i][u] == 'B':
-                red_winner = 0
-                blue_winner += 1
-            else:
-                red_winner = 0
-                blue_winner = 0
+    for row in range(len(grid)):
+        for col in range(int(len(grid[0]) - 3)):
+            if grid[row][col] != 0 and grid[row][col] == grid[row][col + 1] == grid[row][col + 2] == grid[row][col + 3]:
+                    if grid[row][col] == 'R':
+                        red_win = 1
+                        blue_win = 0
+                    elif grid[row][col] == 'B':
+                        red_win = 0
+                        blue_win = 1
             
-            # return si gaganant trouvé (1 = rouge 2 = bleu)
-            if red_winner == 4:
-                return 1
-            elif blue_winner == 4:
-                return 2
-            
-    # test d'un gagant sue les diagonal descendantes
+    # test d'un gagant sue les diagonales descendantes
     for row in range(len(grid) - 3):
         for col in range(int(len(grid[0]) - 3)):
                 if grid[row][col] != 0 and grid[row][col] == grid[row + 1][col + 1] == grid[row + 2][col + 2] == grid[row + 3][col + 3]:
                     if grid[row][col] == 'R':
-                        return 1
+                        red_win = 1
+                        blue_win = 0
                     elif grid[row][col] == 'B':
-                        return 2
+                        red_win = 0
+                        blue_win = 1
                     
     # test d'un gagant sue les diagonal ascendantes
     for row in range(3, len(grid)):
         for col in range(int(len(grid[0])) - 3):
             if grid[row][col] != 0 and grid[row][col] == grid[row - 1][col + 1] == grid[row - 2][col + 2] == grid[row - 3][col + 3]:
                 if grid[row][col] == 'R':
-                    return 1
+                    red_win = 1
+                    blue_win = 0
                 elif grid[row][col] == 'B':
-                    return 2
+                    red_win = 0
+                    blue_win = 1
 
-
+    #gestion d'un gagnant
+    if red_win == 1 and blue_win == 0:
+        print("\nJoueur ROUGE gagne la partie !!!")
+        return 0
+    
+    elif red_win == 0 and blue_win == 1:
+        print("\nJoueur BLEU gagne la partie !!!")
+        return 0
         
-    # return 0 si aucun gagant n'est trouvé  
-    return 0
+
+    return 1
 
 
 
 
-# Code principale
+######          CODE PRINCIPAL          ######
 
 # Explication début de partie
 print("\n---    DEBUT DE LA PARTIE   ---")
 print("\nIl y a 2 joueur ROUGE et BLEU")
 print("\nROUGE = R\nBLEU = B\nvide =  ")
-
 display_grid()
 
 # Lancement de la partie
-
-while end_game == 0:
-    if new_token() != 0:
-        print("colonne complète, impossible de remètre un jeton")
-    else:
-        count_round += 1
-        display_grid()
+while test_winner():
+    new_token()
+    display_grid()
     
-    winner = test_winner()
-
-    if winner != 0:
-        match winner :
-            case 1:
-                print("\nJoueur ROUGE gagne la partie !!!")
-                break
-            case 2 :
-                print("\nJoueur BLEU gagne la partie !!!")
-                break
-    
-
-
-
-
-
-
-
-
-
-
-
-
-"""
-
-input_column = input("\nAjout d'un nouveau jeton pour le joueur ROUGE :\nEntrer une posistion (0 - 6) : ")
-print("\n INPUT : ", input_column)
-
-
-
-row = 2
-col = 3
-value = grid[row][col]
-print(grid)
-"""
