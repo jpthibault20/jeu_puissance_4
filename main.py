@@ -62,6 +62,7 @@ def new_token():
 def test_winner():
     red_win = 0
     blue_win = 0
+
     # test d'un gagnant sur les lignes
     for row in range(len(grid) - 3):
         for col in range(int(len(grid[0]))):
@@ -84,7 +85,7 @@ def test_winner():
                         red_win = 0
                         blue_win = 1
             
-    # test d'un gagant sue les diagonal descendantes
+    # test d'un gagant sue les diagonales descendantes
     for row in range(len(grid) - 3):
         for col in range(int(len(grid[0]) - 3)):
                 if grid[row][col] != 0 and grid[row][col] == grid[row + 1][col + 1] == grid[row + 2][col + 2] == grid[row + 3][col + 3]:
@@ -106,6 +107,7 @@ def test_winner():
                     red_win = 0
                     blue_win = 1
 
+    #gestion d'un gagnant
     if red_win == 1 and blue_win == 0:
         print("\nJoueur ROUGE gagne la partie !!!")
         return 0
@@ -120,44 +122,16 @@ def test_winner():
 
 
 
-# Code principale
+######          CODE PRINCIPAL          ######
 
 # Explication début de partie
 print("\n---    DEBUT DE LA PARTIE   ---")
 print("\nIl y a 2 joueur ROUGE et BLEU")
 print("\nROUGE = R\nBLEU = B\nvide =  ")
-
 display_grid()
 
 # Lancement de la partie
-
 while test_winner():
     new_token()
     display_grid()
     
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-"""
-
-input_column = input("\nAjout d'un nouveau jeton pour le joueur ROUGE :\nEntrer une posistion (0 - 6) : ")
-print("\n INPUT : ", input_column)
-
-
-
-row = 2
-col = 3
-value = grid[row][col]
-print(grid)
-"""
