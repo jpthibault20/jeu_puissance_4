@@ -127,7 +127,7 @@ def test_winner():
 # Explication début de partie
 print("\n---    DEBUT DE LA PARTIE   ---")
 print("\nIl y a 2 joueur ROUGE et JAUNE")
-print("\nROUGE = R\nBLEU = B\nvide =  ")
+print("\nROUGE = R\nJAUNE = B\nvide =  ")
 display_grid()
 
 # Lancement de la partie
