@@ -16,6 +16,7 @@ def display_grid():
     print("---------------------")
     print(grid_index)
 
+
 # FCT : ajouter un jeton dans la grille 
 def new_token():
     indice_rows = 5
@@ -42,50 +43,26 @@ def new_token():
         elif grid[indice_rows][input_column]  != ' ':
             indice_rows -= 1
 
-        
-
 
 # FCT : test si il y a un gagnant
 def test_winner():
     # test d'un gagnant sur les lignes
-    red_winner, blue_winner = 0, 0
-    for i in range(6): # pour chaque lignes
-        for u in range(7):  # pour chaque colonnes
-            if grid[i][u] == 'R':
-                red_winner += 1
-                blue_winner = 0
-            elif grid[i][u] == 'B':
-                red_winner = 0
-                blue_winner += 1
-            else:
-                red_winner = 0
-                blue_winner = 0
-            
-            # return si gaganant trouvé (1 = rouge 2 = bleu)
-            if red_winner == 4:
-                return 1
-            elif blue_winner == 4:
-                return 2
+    for row in range(len(grid) - 3):
+        for col in range(int(len(grid[0]))):
+            if grid[row][col] != 0 and grid[row][col] == grid[row + 1][col] == grid[row + 2][col] == grid[row + 3][col]:
+                    if grid[row][col] == 'R':
+                        return 1
+                    elif grid[row][col] == 'B':
+                        return 2
             
     # test d'un gagnant sur les colonnes
-    red_winner, blue_winner = 0, 0
-    for u in range(7):
-        for i in range(6):
-            if grid[i][u] == 'R':
-                red_winner += 1
-                blue_winner = 0
-            elif grid[i][u] == 'B':
-                red_winner = 0
-                blue_winner += 1
-            else:
-                red_winner = 0
-                blue_winner = 0
-            
-            # return si gaganant trouvé (1 = rouge 2 = bleu)
-            if red_winner == 4:
-                return 1
-            elif blue_winner == 4:
-                return 2
+    for row in range(len(grid)):
+        for col in range(int(len(grid[0]) - 3)):
+            if grid[row][col] != 0 and grid[row][col] == grid[row][col + 1] == grid[row][col + 2] == grid[row][col + 3]:
+                    if grid[row][col] == 'R':
+                        return 1
+                    elif grid[row][col] == 'B':
+                        return 2
             
     # test d'un gagant sue les diagonal descendantes
     for row in range(len(grid) - 3):
@@ -137,10 +114,10 @@ while end_game == 0:
         match winner :
             case 1:
                 print("\nJoueur ROUGE gagne la partie !!!")
-                break
+                end_game = 1
             case 2 :
                 print("\nJoueur BLEU gagne la partie !!!")
-                break
+                end_game = 1
     
 
 
