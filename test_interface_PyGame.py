@@ -1,77 +1,126 @@
-import pygame
-import sys
-import random
+#Imports
+import pygame, sys
+from pygame.locals import *
+import random, time
 
-# Initialisation de Pygame
+#Initialzing 
 pygame.init()
 
-# Couleurs
-BLANC = (255, 255, 255)
-NOIR = (0, 0, 0)
+#Setting up FPS 
+FPS = 60
+FramePerSec = pygame.time.Clock()
 
-# Paramètres de la fenêtre
-largeur, hauteur = 1000, 600
-fenetre = pygame.display.set_mode((largeur, hauteur))
-pygame.display.set_caption("Jeu Pygame - Évitez les obstacles")
+#Creating colors
+BLUE  = (0, 0, 255)
+RED   = (255, 0, 0)
+GREEN = (0, 255, 0)
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
 
-# Chargement des images
-personnage_image = pygame.image.load("personnage.png")
-personnage_image = pygame.transform.scale(personnage_image, (100, 100))  # Redimensionner l'image du personnage
-obstacle_image = pygame.image.load("obstacle.png")
-obstacle_image = pygame.transform.scale(obstacle_image, (150, 150))  # Redimensionner l'image de l'obstacle
+#Other Variables for use in the program
+SCREEN_WIDTH = 400
+SCREEN_HEIGHT = 600
+SPEED = 5
+SCORE = 0
 
-# Position initiale du personnage
-personnage_x = largeur // 2 - 25
-personnage_y = hauteur - 100
+#Setting up Fonts
+font = pygame.font.SysFont("Verdana", 60)
+font_small = pygame.font.SysFont("Verdana", 20)
+game_over = font.render("Game Over", True, BLACK)
 
-# Position initiale de l'obstacle
-obstacle_x = random.randint(0, largeur - 150)
-obstacle_y = -150
-obstacle_vitesse = 20
+background = pygame.image.load("AnimatedStreet.png")
 
-# Boucle principale
-clock = pygame.time.Clock()
+#Create a white screen 
+DISPLAYSURF = pygame.display.set_mode((400,600))
+DISPLAYSURF.fill(WHITE)
+pygame.display.set_caption("Game")
 
+
+class Enemy(pygame.sprite.Sprite):
+      def __init__(self):
+        super().__init__() 
+        self.image = pygame.image.load("Enemy.png")
+        self.rect = self.image.get_rect()
+        self.rect.center = (random.randint(40,SCREEN_WIDTH-40), 0)
+
+      def move(self):
+        global SCORE
+        self.rect.move_ip(0,SPEED)
+        if (self.rect.bottom > 600):
+            SCORE += 1
+            self.rect.top = 0
+            self.rect.center = (random.randint(40, SCREEN_WIDTH - 40), 0)
+
+
+class Player(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__() 
+        self.image = pygame.image.load("Player.png")
+        self.rect = self.image.get_rect()
+        self.rect.center = (160, 520)
+       
+    def move(self):
+        pressed_keys = pygame.key.get_pressed()
+        
+        if self.rect.left > 0:
+              if pressed_keys[K_LEFT]:
+                  self.rect.move_ip(-5, 0)
+        if self.rect.right < SCREEN_WIDTH:        
+              if pressed_keys[K_RIGHT]:
+                  self.rect.move_ip(5, 0)
+                  
+
+#Setting up Sprites        
+P1 = Player()
+E1 = Enemy()
+
+#Creating Sprites Groups
+enemies = pygame.sprite.Group()
+enemies.add(E1)
+all_sprites = pygame.sprite.Group()
+all_sprites.add(P1)
+all_sprites.add(E1)
+
+#Adding a new User event 
+INC_SPEED = pygame.USEREVENT + 1
+pygame.time.set_timer(INC_SPEED, 1000)
+
+#Game Loop
 while True:
+      
+    #Cycles through all events occuring  
     for event in pygame.event.get():
-        if event.type == pygame.QUIT:
+        if event.type == INC_SPEED:
+              SPEED += 0.5      
+        if event.type == QUIT:
             pygame.quit()
             sys.exit()
 
-    # Déplacement du personnage avec les touches fléchées
-    touches = pygame.key.get_pressed()
-    if touches[pygame.K_LEFT] and personnage_x > 0:
-        personnage_x -= 15
-    if touches[pygame.K_RIGHT] and personnage_x < largeur - 50:
-        personnage_x += 15
 
-    # Déplacement de l'obstacle vers le bas
-    obstacle_y += obstacle_vitesse
+    DISPLAYSURF.blit(background, (0,0))
+    scores = font_small.render(str(SCORE), True, BLACK)
+    DISPLAYSURF.blit(scores, (10,10))
 
-    # Réinitialisation de l'obstacle s'il atteint le bas de l'écran
-    if obstacle_y > hauteur:
-        obstacle_x = random.randint(0, largeur - 150)
-        obstacle_y = -150
+    #Moves and Re-draws all Sprites
+    for entity in all_sprites:
+        entity.move()
+        DISPLAYSURF.blit(entity.image, entity.rect)
+        
 
-    # Vérification de la collision entre le personnage et l'obstacle
-    if (
-        personnage_x < obstacle_x + 150
-        and personnage_x + 150 > obstacle_x
-        and personnage_y < obstacle_y + 150
-        and personnage_y + 150 > obstacle_y
-    ):
-        print("Collision !")
-        pygame.quit()
-        sys.exit()
-
-    # Effacer l'écran
-    fenetre.fill(BLANC)
-
-    # Afficher le personnage et l'obstacle
-    fenetre.blit(personnage_image, (personnage_x, personnage_y))
-    fenetre.blit(obstacle_image, (obstacle_x, obstacle_y))
-
-    pygame.display.flip()
-
-    # Réguler la vitesse de la boucle
-    clock.tick(30)
+    #To be run if collision occurs between Player and Enemy
+    if pygame.sprite.spritecollideany(P1, enemies):
+          pygame.mixer.Sound('crash.wav').play()
+          time.sleep(1)
+                   
+          DISPLAYSURF.fill(RED)
+          DISPLAYSURF.blit(game_over, (30,250))
+          
+          pygame.display.update()
+          for entity in all_sprites:
+                entity.kill() 
+          time.sleep(2)
+          pygame.quit()
+          sys.exit()        
+        
+    pygame.display.update()
+    FramePerSec.tick(FPS)
