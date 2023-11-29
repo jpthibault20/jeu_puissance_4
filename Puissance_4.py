@@ -2,15 +2,12 @@ import pygame
 import sys
 
 
-
-
 # Constants
 ROW_COUNT = 6
 COLUMN_COUNT = 7
 SQUARE_SIZE = 100
 WIDTH = COLUMN_COUNT * SQUARE_SIZE
 HEIGHT = (ROW_COUNT + 0) * SQUARE_SIZE  # +1 for an additional row to display the selected column
-
 grid = [[0 for i in range(COLUMN_COUNT)] for u in range(ROW_COUNT)]  # Creat board
 ROUND = 1
 
@@ -49,7 +46,8 @@ def draw_grid():
                     pygame.draw.circle(screen,RED_move,(col * SQUARE_SIZE + SQUARE_SIZE // 2,row * SQUARE_SIZE + SQUARE_SIZE // 2,),int(SQUARE_SIZE * 0.4),)
                 case 20:
                     pygame.draw.circle(screen,YELLOW_move,(col * SQUARE_SIZE + SQUARE_SIZE // 2,row * SQUARE_SIZE + SQUARE_SIZE // 2,),int(SQUARE_SIZE * 0.4),)
-                    
+
+
 # FCT : pre drop piece
 def pre_drop_piece(col):
     col_past = 10
@@ -77,9 +75,6 @@ def pre_drop_piece(col):
                 grid[i][col] = 10
             case 2:
                 grid[i][col] = 20
-
-
-
 
 
 #FCT : drop piece
@@ -160,9 +155,10 @@ def test_winner():
 
     return 0
 
+
+
 ### MAIN
 end_game = False
-
 
 while end_game == False:
     for event in pygame.event.get():
@@ -192,7 +188,6 @@ while end_game == False:
         elif event.type == pygame.MOUSEMOTION:
             col = event.pos[0] //100
             pre_drop_piece(col)
-            
-                
+                      
     draw_grid()
     pygame.display.update()
